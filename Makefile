@@ -30,6 +30,7 @@ AS=$(PREFIX)as
 CP=$(PREFIX)objcopy
 OD=$(PREFIX)objdump
 SE=$(PREFIX)size
+RL=$(PREFIX)ranlib
 
 ARFLAGS = rcs
 CFLAGS += -c
@@ -62,6 +63,7 @@ all: $(TARGET)
 # Rule to create an ELF file from the compiled object files.
 $(TARGET): $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
+	$(RL) $@
 
 clean:
 		rm -f $(OBJS) $(TARGET)

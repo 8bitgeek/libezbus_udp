@@ -24,15 +24,15 @@
 extern char *optarg;
 extern int optind, opterr, optopt;
 
-extern int ezbus_udp_cmdline_setup(cmdline_t* cmdline,int argc, char* argv[])
+extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc, char* argv[])
 {
     int opt;
 
-    memset(cmdline,0,sizeof(cmdline_t));
+    memset(cmdline,0,sizeof(ezbus_udp_cmdline_t));
     cmdline->address = ezbus_udp_default_address();
     cmdline->port = ezbus_udp_default_port();
 
-    while ((opt = getopt(argc, argv, "a:p:i:")) != -1) 
+    while ((opt = getopt(argc, argv, "a:p:i:t:")) != -1) 
     {
         switch (opt) 
         {
