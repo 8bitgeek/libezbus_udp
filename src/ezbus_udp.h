@@ -19,27 +19,34 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#ifndef _CMDLINE_H_
-#define _CMDLINE_H_
-#include <ezbus_sim.h>
+#ifndef _EZBUS_UDP_H_
+#define _EZBUS_UDP_H_
 
-#ifdef __cplusplus
-extern "C" {
+#include <stdio.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+
+#if !defined(EZBUS_UDP_MAX_MESSAGE_SZ)
+    #define EZBUS_UDP_MAX_MESSAGE_SZ    1500
+#endif 
+
+#if !defined(EZBUS_UDP_ADDRESS)
+    #define EZBUS_UDP_ADDRESS           "224.0.0.1"
 #endif
 
-typedef struct cmdline
-{
-    const char*     address;
-    int             port;
-} cmdline_t;
-
-#define ezbus_sim_cmdline_address(cmdline)    (cmdline)->address
-#define ezbus_sim_cmdline_port(cmdline)       (cmdline)->port
-
-extern int ezbus_sim_cmdline_setup  (cmdline_t* cmdline,int argc,char* argv[]);
-
-#ifdef __cplusplus
-}
+#if !defined(EZBUS_UDP_PORT)
+    #define EZBUS_UDP_PORT              8260
 #endif
 
+#define ezbus_udp_default_address()     EZBUS_UDP_ADDRESS
+#define ezbus_udp_default_port()        EZBUS_UDP_PORT
+
 #endif
+

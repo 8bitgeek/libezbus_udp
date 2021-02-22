@@ -19,30 +19,44 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#ifndef _EZBUS_SIM_LISTEN_H_
-#define _EZBUS_SIM_LISTEN_H_
-#include <ezbus_sim.h>
+#include <ezbus_udp_cmdline.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+extern char *optarg;
+extern int optind, opterr, optopt;
 
-typedef struct listen
+extern int ezbus_udp_cmdline_setup(cmdline_t* cmdline,int argc, char* argv[])
 {
-    struct ip_mreq      command;
-    socklen_t           sin_len;
-    char                message[EZBUS_SIM_MAX_MESSAGE_SZ];
-    int                 socket_descriptor;
-    struct sockaddr_in  sin;
-    struct hostent*     server_host_name;      
-} listen_t;
+    int opt;
 
-extern int  ezbus_sim_listen_setup  (listen_t* listen,const char* address,int port);
-extern void ezbus_sim_listen_close  (listen_t* listen);
-extern int  ezbus_sim_listen_recv   (listen_t* listen,void* data,size_t size);
+    memset(cmdline,0,sizeof(cmdline_t));
+    cmdline->address = ezbus_udp_default_address();
+    cmdline->port = ezbus_udp_default_port();
 
-#ifdef __cplusplus
+    while ((opt = getopt(argc, argv, "a:p:i:")) != -1) 
+    {
+        switch (opt) 
+        {
+            case 'a':
+                cmdline->address = optarg;
+                break;
+            case 'p':
+                cmdline->port = atoi(optarg);
+                break;
+            case 'i':
+                cmdline->id = (uint32_t)atoi(optarg);
+                break;
+            default: /* '?' */
+                fprintf(stderr, "Usage: %s [-a address] [-p port] [-i id]\n",
+                argv[0]);
+                return -1;
+        }
+    }
+
+    if (optind >= argc) 
+    {
+        fprintf(stderr, "missing argument\n");
+        return -1;
+    }
+
+    return 0;
 }
-#endif
-
-#endif

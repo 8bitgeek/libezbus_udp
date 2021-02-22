@@ -19,41 +19,26 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#include <ezbus_sim_cmdline.h>
+#ifndef EZBUS_UDP_BROADCAST_H_
+#define EZBUS_UDP_BROADCAST_H_
+#include <ezbus_udp.h>
 
-extern char *optarg;
-extern int optind, opterr, optopt;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-extern int ezbus_sim_cmdline_setup(cmdline_t* cmdline,int argc, char* argv[])
+typedef struct broadcast
 {
-    int opt;
+    int                 socket_descriptor;
+    struct sockaddr_in  address;
+} broadcast_t;
 
-    memset(cmdline,0,sizeof(cmdline_t));
-    cmdline->address = ezbus_sim_default_address();
-    cmdline->port = ezbus_sim_default_port();
+extern int  ezbus_udp_broadcast_setup  (broadcast_t* broadcast,const char* address,int port);
+extern void ezbus_udp_broadcast_close  (broadcast_t* broadcast);
+extern int  ezbus_udp_broadcast_send   (broadcast_t* broadcast,const void* data,size_t size);
 
-    while ((opt = getopt(argc, argv, "a:p:")) != -1) 
-    {
-        switch (opt) 
-        {
-            case 'a':
-                cmdline->address = optarg;
-                break;
-            case 'p':
-                cmdline->port = atoi(optarg);
-                break;
-            default: /* '?' */
-                fprintf(stderr, "Usage: %s [-a address] [-p port]\n",
-                argv[0]);
-                return -1;
-        }
-    }
-
-    if (optind >= argc) 
-    {
-        fprintf(stderr, "missing argument\n");
-        return -1;
-    }
-
-    return 0;
+#ifdef __cplusplus
 }
+#endif
+
+#endif

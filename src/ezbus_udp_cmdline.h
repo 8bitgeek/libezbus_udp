@@ -19,34 +19,29 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#ifndef _EZBUS_SIM_H_
-#define _EZBUS_SIM_H_
+#ifndef EZBUS_UDP_CMDLINE_H_
+#define EZBUS_UDP_CMDLINE_H_
+#include <ezbus_udp.h>
 
-#include <stdio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <string.h>
-
-#if !defined(EZBUS_SIM_MAX_MESSAGE_SZ)
-    #define EZBUS_SIM_MAX_MESSAGE_SZ    1500
-#endif 
-
-#if !defined(EZBUS_SIM_ADDRESS)
-    #define EZBUS_SIM_ADDRESS           "224.0.0.1"
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-#if !defined(EZBUS_SIM_PORT)
-    #define EZBUS_SIM_PORT              8260
+typedef struct cmdline
+{
+    const char*     address;
+    int             port;
+    uint32_t        id;
+} cmdline_t;
+
+#define ezbus_udp_cmdline_address(cmdline)    (cmdline)->address
+#define ezbus_udp_cmdline_port(cmdline)       (cmdline)->port
+#define ezbus_udp_cmdline_id(cmdline)         (cmdline)->id
+
+extern int ezbus_udp_cmdline_setup  (cmdline_t* cmdline,int argc,char* argv[]);
+
+#ifdef __cplusplus
+}
 #endif
 
-#define ezbus_sim_default_address()     EZBUS_SIM_ADDRESS
-#define ezbus_sim_default_port()        EZBUS_SIM_PORT
-
 #endif
-

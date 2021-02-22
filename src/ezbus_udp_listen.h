@@ -19,23 +19,27 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#ifndef _BROADCAST_H_
-#define _BROADCAST_H_
-#include <ezbus_sim.h>
+#ifndef _EZBUS_UDP_LISTEN_H_
+#define _EZBUS_UDP_LISTEN_H_
+#include <ezbus_udp.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct broadcast
+typedef struct listen
 {
+    struct ip_mreq      command;
+    socklen_t           sin_len;
+    char                message[EZBUS_UDP_MAX_MESSAGE_SZ];
     int                 socket_descriptor;
-    struct sockaddr_in  address;
-} broadcast_t;
+    struct sockaddr_in  sin;
+    struct hostent*     server_host_name;      
+} listen_t;
 
-extern int  ezbus_sim_broadcast_setup  (broadcast_t* broadcast,const char* address,int port);
-extern void ezbus_sim_broadcast_close  (broadcast_t* broadcast);
-extern int  ezbus_sim_broadcast_send   (broadcast_t* broadcast,const void* data,size_t size);
+extern int  ezbus_udp_listen_setup  (listen_t* listen,const char* address,int port);
+extern void ezbus_udp_listen_close  (listen_t* listen);
+extern int  ezbus_udp_listen_recv   (listen_t* listen,void* data,size_t size);
 
 #ifdef __cplusplus
 }

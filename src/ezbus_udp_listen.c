@@ -19,9 +19,9 @@
 * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 * DEALINGS IN THE SOFTWARE.                                                  *
 *****************************************************************************/
-#include <ezbus_sim_listen.h>
+#include <ezbus_udp_listen.h>
 
-extern int ezbus_sim_listen_setup(listen_t* listen,const char* address,int port)
+extern int ezbus_udp_listen_setup(listen_t* listen,const char* address,int port)
 {
     bool okay=false;
     int loop=1;
@@ -90,13 +90,13 @@ extern int ezbus_sim_listen_setup(listen_t* listen,const char* address,int port)
 
     if ( !okay )
     {
-        ezbus_sim_listen_close(listen);
+        ezbus_udp_listen_close(listen);
     }
 
     return listen->socket_descriptor;
 }
 
-extern void ezbus_sim_listen_close(listen_t* listen)
+extern void ezbus_udp_listen_close(listen_t* listen)
 {
     if ( listen->socket_descriptor >= 0 )
     {
@@ -107,7 +107,7 @@ extern void ezbus_sim_listen_close(listen_t* listen)
     listen->socket_descriptor = (-1);
 }
 
-extern int ezbus_sim_listen_recv(listen_t* listen,void* message,size_t size)
+extern int ezbus_udp_listen_recv(listen_t* listen,void* message,size_t size)
 {
     return recvfrom(listen->socket_descriptor,message,size,0,(struct sockaddr*)&listen->sin,&listen->sin_len);
 }

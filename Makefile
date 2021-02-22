@@ -19,7 +19,7 @@
 #* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *
 #* DEALINGS IN THE SOFTWARE.                                                  *
 #*****************************************************************************/
-TARGET=libezbus_sim.a
+TARGET=libezbus_udp.a
 
 PREFIX=/usr/bin/
 
@@ -39,9 +39,9 @@ LFLAGS = -Wl,-Map=$(TARGET).map
 INCLUDE =  -I ./
 INCLUDE += -I ./src
 
-C_SRC  += src/ezbus_sim_broadcast.c
-C_SRC  += src/ezbus_sim_listen.c
-C_SRC  += src/ezbus_sim_cmdline.c
+C_SRC  += src/ezbus_udp_broadcast.c
+C_SRC  += src/ezbus_udp_listen.c
+C_SRC  += src/ezbus_udp_cmdline.c
 
 # Object files to build.
 OBJS  = $(AS_SRC:.S=.o)
