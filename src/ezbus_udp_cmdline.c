@@ -52,11 +52,5 @@ extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc, char* 
         }
     }
 
-    if (optind >= argc) 
-    {
-        fprintf(stderr, "missing argument\n");
-        return -1;
-    }
-
     return 0;
 }
