@@ -54,7 +54,13 @@ extern int ezbus_udp_listen_setup(ezbus_udp_listen_t* listen,const char* address
                             {
                                 if ( setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_ADD_MEMBERSHIP,&listen->command,sizeof(listen->command)) >= 0 )
                                 {
-                                    okay=true;
+                                    struct timeval read_timeout;
+                                    read_timeout.tv_sec = 0;
+                                    read_timeout.tv_usec = 10;
+                                    if ( setsockopt(listen->socket_descriptor,SOL_SOCKET,SO_RCVTIMEO,&read_timeout,sizeof(read_timeout)) >= 0 )
+                                    {
+                                        okay=true;
+                                    }
                                 }
                                 else
                                 {
@@ -126,7 +132,7 @@ extern int ezbus_udp_listen_recv(ezbus_udp_listen_t* listen,void* message,size_t
                             (struct sockaddr*)&listen->sin,
                             &listen->sin_len
                         );
-    if ( count )
+    if ( count > 0 )
     {
         ezbus_udp_fifo_put(&listen->fifo,listen->fifo.chunk,count);
     }

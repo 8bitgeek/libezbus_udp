@@ -26,8 +26,8 @@ static int  ezbus_udp_fifo_get_ch(ezbus_udp_fifo_t* fifo);
 
 extern bool ezbus_udp_fifo_setup(ezbus_udp_fifo_t* fifo,size_t size)
 {
-    fifo->size = size > 0 ? size : EZBUS_UDP_FIFO_SZ;
     memset(fifo,0,sizeof(ezbus_udp_fifo_t));
+    fifo->size = size > 0 ? size : EZBUS_UDP_FIFO_SZ;
     fifo->buffer=(uint8_t*)malloc(size);
     return fifo->buffer != NULL;
 }
