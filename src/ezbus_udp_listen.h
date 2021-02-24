@@ -35,11 +35,11 @@ typedef struct listen
     int                 socket_descriptor;
     struct sockaddr_in  sin;
     struct hostent*     server_host_name;      
-} listen_t;
+} ezbus_udp_listen_t;
 
-extern int  ezbus_udp_listen_setup  (listen_t* listen,const char* address,int port);
-extern void ezbus_udp_listen_close  (listen_t* listen);
-extern int  ezbus_udp_listen_recv   (listen_t* listen,void* data,size_t size);
+extern int  ezbus_udp_listen_setup  (ezbus_udp_listen_t* listen,const char* address,int port);
+extern void ezbus_udp_listen_close  (ezbus_udp_listen_t* listen);
+extern int  ezbus_udp_listen_recv   (ezbus_udp_listen_t* listen,void* data,size_t size);
 
 #ifdef __cplusplus
 }

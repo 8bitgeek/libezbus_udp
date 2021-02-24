@@ -32,7 +32,7 @@ extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc, char* 
     cmdline->address = ezbus_udp_default_address();
     cmdline->port = ezbus_udp_default_port();
 
-    while ((opt = getopt(argc, argv, "a:p:i:")) != -1) 
+    while ((opt = getopt(argc, argv, "a:p:i:s:b:")) != -1) 
     {
         switch (opt) 
         {
@@ -45,8 +45,14 @@ extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc, char* 
             case 'i':
                 cmdline->id = (uint32_t)atoi(optarg);
                 break;
+            case 's':
+                cmdline->serial_device = optarg;
+                break;
+            case 'b':
+                cmdline->serial_baud = atoi(optarg);
+                break;
             default: /* '?' */
-                fprintf(stderr, "Usage: %s [-a address] [-p port] [-i id]\n",
+                fprintf(stderr, "Usage: %s [-a address] [-p port] [-i id] [-s serial device] [-b serial baud]\n",
                 argv[0]);
                 return -1;
         }

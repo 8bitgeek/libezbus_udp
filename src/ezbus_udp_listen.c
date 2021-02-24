@@ -21,12 +21,12 @@
 *****************************************************************************/
 #include <ezbus_udp_listen.h>
 
-extern int ezbus_udp_listen_setup(listen_t* listen,const char* address,int port)
+extern int ezbus_udp_listen_setup(ezbus_udp_listen_t* listen,const char* address,int port)
 {
     bool okay=false;
     int loop=1;
 
-    memset(listen,0,sizeof(listen_t));
+    memset(listen,0,sizeof(ezbus_udp_listen_t));
     
     if ( (listen->server_host_name = gethostbyname(address)) != NULL )
     {
@@ -96,18 +96,18 @@ extern int ezbus_udp_listen_setup(listen_t* listen,const char* address,int port)
     return listen->socket_descriptor;
 }
 
-extern void ezbus_udp_listen_close(listen_t* listen)
+extern void ezbus_udp_listen_close(ezbus_udp_listen_t* listen)
 {
     if ( listen->socket_descriptor >= 0 )
     {
         setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_DROP_MEMBERSHIP,&listen->command,sizeof(listen->command));
         close(listen->socket_descriptor);
     }
-    memset(listen,0,sizeof(listen_t));
+    memset(listen,0,sizeof(ezbus_udp_listen_t));
     listen->socket_descriptor = (-1);
 }
 
-extern int ezbus_udp_listen_recv(listen_t* listen,void* message,size_t size)
+extern int ezbus_udp_listen_recv(ezbus_udp_listen_t* listen,void* message,size_t size)
 {
     return recvfrom(listen->socket_descriptor,message,size,0,(struct sockaddr*)&listen->sin,&listen->sin_len);
 }

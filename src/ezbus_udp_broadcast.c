@@ -21,9 +21,9 @@
 *****************************************************************************/
 #include <ezbus_udp_broadcast.h>
 
-extern int ezbus_udp_broadcast_setup(broadcast_t* broadcast,const char* address,int port)
+extern int ezbus_udp_broadcast_setup(ezbus_udp_broadcast_t* broadcast,const char* address,int port)
 {
-    memset(broadcast,0,sizeof(broadcast_t));
+    memset(broadcast,0,sizeof(ezbus_udp_broadcast_t));
     broadcast->socket_descriptor = socket(AF_INET,SOCK_DGRAM,0);
     if ( broadcast->socket_descriptor >= 0 )
     {
@@ -34,17 +34,17 @@ extern int ezbus_udp_broadcast_setup(broadcast_t* broadcast,const char* address,
     return broadcast->socket_descriptor;
 }
 
-extern void ezbus_udp_broadcast_close(broadcast_t* broadcast)
+extern void ezbus_udp_broadcast_close(ezbus_udp_broadcast_t* broadcast)
 {
     if (broadcast->socket_descriptor >= 0 )
     {
         close(broadcast->socket_descriptor);
     }
-    memset(broadcast,0,sizeof(broadcast_t));
+    memset(broadcast,0,sizeof(ezbus_udp_broadcast_t));
     broadcast->socket_descriptor = (-1);
 }
 
-extern int ezbus_udp_broadcast_send(broadcast_t* broadcast,const void* data,size_t size)
+extern int ezbus_udp_broadcast_send(ezbus_udp_broadcast_t* broadcast,const void* data,size_t size)
 {
     return sendto(
                     broadcast->socket_descriptor,

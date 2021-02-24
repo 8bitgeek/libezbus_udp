@@ -31,11 +31,11 @@ typedef struct broadcast
 {
     int                 socket_descriptor;
     struct sockaddr_in  address;
-} broadcast_t;
+} ezbus_udp_broadcast_t;
 
-extern int  ezbus_udp_broadcast_setup  (broadcast_t* broadcast,const char* address,int port);
-extern void ezbus_udp_broadcast_close  (broadcast_t* broadcast);
-extern int  ezbus_udp_broadcast_send   (broadcast_t* broadcast,const void* data,size_t size);
+extern int  ezbus_udp_broadcast_setup  (ezbus_udp_broadcast_t* broadcast,const char* address,int port);
+extern void ezbus_udp_broadcast_close  (ezbus_udp_broadcast_t* broadcast);
+extern int  ezbus_udp_broadcast_send   (ezbus_udp_broadcast_t* broadcast,const void* data,size_t size);
 
 #ifdef __cplusplus
 }

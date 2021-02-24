@@ -29,14 +29,18 @@ extern "C" {
 
 typedef struct cmdline
 {
+    const char*     serial_device;
+    int             serial_baud;
     const char*     address;
     int             port;
     uint32_t        id;
 } ezbus_udp_cmdline_t;
 
-#define ezbus_udp_cmdline_address(cmdline)    (cmdline)->address
-#define ezbus_udp_cmdline_port(cmdline)       (cmdline)->port
-#define ezbus_udp_cmdline_id(cmdline)         (cmdline)->id
+#define ezbus_udp_cmdline_serial_device(cmdline)    (cmdline)->serial_device
+#define ezbus_udp_cmdline_serial_baud(cmdline)      (cmdline)->serial_baud
+#define ezbus_udp_cmdline_address(cmdline)          (cmdline)->address
+#define ezbus_udp_cmdline_port(cmdline)             (cmdline)->port
+#define ezbus_udp_cmdline_id(cmdline)               (cmdline)->id
 
 extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc,char* argv[]);
 
