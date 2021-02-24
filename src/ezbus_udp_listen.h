@@ -22,6 +22,7 @@
 #ifndef _EZBUS_UDP_LISTEN_H_
 #define _EZBUS_UDP_LISTEN_H_
 #include <ezbus_udp.h>
+#include <ezbus_udp_fifo.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +35,8 @@ typedef struct listen
     char                message[EZBUS_UDP_MAX_MESSAGE_SZ];
     int                 socket_descriptor;
     struct sockaddr_in  sin;
-    struct hostent*     server_host_name;      
+    struct hostent*     server_host_name;
+    ezbus_udp_fifo_t    fifo;   
 } ezbus_udp_listen_t;
 
 extern int  ezbus_udp_listen_setup  (ezbus_udp_listen_t* listen,const char* address,int port);

@@ -27,65 +27,73 @@ extern int ezbus_udp_listen_setup(ezbus_udp_listen_t* listen,const char* address
     int loop=1;
 
     memset(listen,0,sizeof(ezbus_udp_listen_t));
-    
-    if ( (listen->server_host_name = gethostbyname(address)) != NULL )
-    {
-        bzero(&listen->sin,sizeof(listen->sin));
-        listen->sin.sin_family = AF_INET;
-        listen->sin.sin_addr.s_addr = htonl(INADDR_ANY);
-        listen->sin.sin_port = htons(port);
+    listen->socket_descriptor = -1;
 
-        if ( (listen->socket_descriptor = socket(PF_INET,SOCK_DGRAM,0)) >= 0 )
+    if ( ezbus_udp_fifo_setup(&listen->fifo,0) )
+    {
+        if ( (listen->server_host_name = gethostbyname(address)) != NULL )
         {
-            if ( setsockopt(listen->socket_descriptor,SOL_SOCKET,SO_REUSEADDR,&loop,sizeof(loop)) >= 0 )
+            bzero(&listen->sin,sizeof(listen->sin));
+            listen->sin.sin_family = AF_INET;
+            listen->sin.sin_addr.s_addr = htonl(INADDR_ANY);
+            listen->sin.sin_port = htons(port);
+
+            if ( (listen->socket_descriptor = socket(PF_INET,SOCK_DGRAM,0)) >= 0 )
             {
-                if ( bind(listen->socket_descriptor,(struct sockaddr*)&listen->sin,sizeof(listen->sin)) >= 0 )
+                if ( setsockopt(listen->socket_descriptor,SOL_SOCKET,SO_REUSEADDR,&loop,sizeof(loop)) >= 0 )
                 {
-                    /* Allow loopback broadcast */
-                    if ( setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_MULTICAST_LOOP,&loop,sizeof(loop)) >= 0 )
+                    if ( bind(listen->socket_descriptor,(struct sockaddr*)&listen->sin,sizeof(listen->sin)) >= 0 )
                     {
-                        /* Join the broadcast group */
-                        listen->command.imr_multiaddr.s_addr = inet_addr(address);
-                        listen->command.imr_interface.s_addr = htonl(INADDR_ANY);
-                        if ( listen->command.imr_multiaddr.s_addr >= 0 )
+                        /* Allow loopback broadcast */
+                        if ( setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_MULTICAST_LOOP,&loop,sizeof(loop)) >= 0 )
                         {
-                            if ( setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_ADD_MEMBERSHIP,&listen->command,sizeof(listen->command)) < 0 )
+                            /* Join the broadcast group */
+                            listen->command.imr_multiaddr.s_addr = inet_addr(address);
+                            listen->command.imr_interface.s_addr = htonl(INADDR_ANY);
+                            if ( listen->command.imr_multiaddr.s_addr >= 0 )
                             {
-                                okay=true;
+                                if ( setsockopt(listen->socket_descriptor,IPPROTO_IP,IP_ADD_MEMBERSHIP,&listen->command,sizeof(listen->command)) >= 0 )
+                                {
+                                    okay=true;
+                                }
+                                else
+                                {
+                                    perror("setsockopt:IP_ADD_MEMBERSHIP");
+                                }
                             }
                             else
                             {
-                                perror("setsockopt:IP_ADD_MEMBERSHIP");
+                                perror("multicast address invalid");
                             }
                         }
                         else
                         {
-                            perror("multicast address invalid");
+                            perror("setsockopt:IP_MULTICAST_LOOP");
                         }
                     }
                     else
                     {
-                        perror("setsockopt:IP_MULTICAST_LOOP");
+                        perror("bind");
                     }
                 }
                 else
                 {
-                    perror("bind");
+                    perror("setsockopt:SO_REUSEADDR");
                 }
             }
             else
             {
-                perror("setsockopt:SO_REUSEADDR");
+                perror("socket");
             }
         }
         else
         {
-            perror("socket");
+            perror("gethostbyname");
         }
     }
     else
     {
-        perror("gethostbyname");
+        perror("ezbus_udp_fifo_setup");
     }
 
     if ( !okay )
@@ -105,9 +113,23 @@ extern void ezbus_udp_listen_close(ezbus_udp_listen_t* listen)
     }
     memset(listen,0,sizeof(ezbus_udp_listen_t));
     listen->socket_descriptor = (-1);
+    ezbus_udp_fifo_close(&listen->fifo);
 }
 
 extern int ezbus_udp_listen_recv(ezbus_udp_listen_t* listen,void* message,size_t size)
 {
-    return recvfrom(listen->socket_descriptor,message,size,0,(struct sockaddr*)&listen->sin,&listen->sin_len);
+    int count = recvfrom(
+                            listen->socket_descriptor,
+                            listen->fifo.chunk,
+                            EZBUS_UDP_FIFO_SZ,
+                            0,
+                            (struct sockaddr*)&listen->sin,
+                            &listen->sin_len
+                        );
+    if ( count )
+    {
+        ezbus_udp_fifo_put(&listen->fifo,listen->fifo.chunk,count);
+    }
+
+    return ezbus_udp_fifo_get(&listen->fifo,message,size);
 }
