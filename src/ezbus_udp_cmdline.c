@@ -32,7 +32,7 @@ extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc, char* 
     cmdline->address = ezbus_udp_default_address();
     cmdline->port = ezbus_udp_default_port();
 
-    while ((opt = getopt(argc, argv, "a:p:i:t:")) != -1) 
+    while ((opt = getopt(argc, argv, "a:p:i:")) != -1) 
     {
         switch (opt) 
         {

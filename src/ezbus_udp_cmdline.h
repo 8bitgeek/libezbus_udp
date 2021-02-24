@@ -38,7 +38,7 @@ typedef struct cmdline
 #define ezbus_udp_cmdline_port(cmdline)       (cmdline)->port
 #define ezbus_udp_cmdline_id(cmdline)         (cmdline)->id
 
-extern int ezbus_udp_cmdline_setup  (ezbus_udp_cmdline_t* cmdline,int argc,char* argv[]);
+extern int ezbus_udp_cmdline_setup(ezbus_udp_cmdline_t* cmdline,int argc,char* argv[]);
 
 #ifdef __cplusplus
 }
