@@ -127,7 +127,7 @@ extern int ezbus_udp_listen_recv(ezbus_udp_listen_t* listen,void* message,size_t
     int count = recvfrom(
                             listen->socket_descriptor,
                             listen->fifo.chunk,
-                            EZBUS_UDP_FIFO_SZ,
+                            EZBUS_UDP_FIFO_CHUNK_SZ,
                             0,
                             (struct sockaddr*)&listen->sin,
                             &listen->sin_len
