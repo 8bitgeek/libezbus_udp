@@ -37,16 +37,5 @@
     #define EZBUS_UDP_MAX_MESSAGE_SZ    1500
 #endif 
 
-#if !defined(EZBUS_UDP_ADDRESS)
-    #define EZBUS_UDP_ADDRESS           "224.0.0.1"
-#endif
-
-#if !defined(EZBUS_UDP_PORT)
-    #define EZBUS_UDP_PORT              8260
-#endif
-
-#define ezbus_udp_default_address()     EZBUS_UDP_ADDRESS
-#define ezbus_udp_default_port()        EZBUS_UDP_PORT
-
 #endif
 
