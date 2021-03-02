@@ -43,7 +43,6 @@ INCLUDE += -I ./src
 C_SRC  += src/ezbus_udp_broadcast.c
 C_SRC  += src/ezbus_udp_listen.c
 C_SRC  += src/ezbus_udp_fifo.c
-C_SRC  += src/ezbus_udp_cmdline.c
 
 # Object files to build.
 OBJS  = $(AS_SRC:.S=.o)
