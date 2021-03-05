@@ -34,7 +34,9 @@ RL=$(PREFIX)ranlib
 
 ARFLAGS = rcs
 CFLAGS += -c
-CFLAGS += -std=gnu99 -ggdb -O0 -Wall -Wno-unused-function
+CFLAGS += -O2 
+#CFLAGS += -ggdb -O0 
+CFLAGS += -std=gnu99 -Wall -Wno-unused-function
 LFLAGS = -Wl,-Map=$(TARGET).map
 
 INCLUDE =  -I ./
