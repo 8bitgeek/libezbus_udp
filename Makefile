@@ -34,8 +34,8 @@ RL=$(PREFIX)ranlib
 
 ARFLAGS = rcs
 CFLAGS += -c
-CFLAGS += -O2 
-#CFLAGS += -ggdb -O0 
+#CFLAGS += -O2 
+CFLAGS += -ggdb -O0 
 CFLAGS += -std=gnu99 -Wall -Wno-unused-function
 LFLAGS = -Wl,-Map=$(TARGET).map
 
